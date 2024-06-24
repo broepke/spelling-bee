@@ -20,7 +20,7 @@ def generate_words(letters, must_include, top_n, min_length, max_length, starts_
     return valid_words
 
 def main():
-    st.title("NYT Spelling Bee Solver")
+    st.title(":bee: NYT Spelling Bee Solver :bee:")
 
     # Sidebar inputs
     top_n = st.sidebar.number_input("Top N words", min_value=1, value=100000)
