@@ -20,13 +20,15 @@ def generate_words(letters, must_include, top_n, min_length, max_length, starts_
     return valid_words
 
 def main():
-    st.title(":bee: NYT Spelling Bee Solver :bee:")
+    
+    st.title("Spelling Bee Helper :bee:")
 
     # Sidebar inputs
     top_n = st.sidebar.number_input("Number of words to check", min_value=10000, value=100000, max_value=50000000)
-    min_length = st.sidebar.number_input("Minimum word length", min_value=4, max_value=20, value=4)
-    max_length = st.sidebar.number_input("Maximum word length", min_value=4, max_value=20, value=8)
+    min_length = st.sidebar.slider("Minimum word length", min_value=4, max_value=12, value=4)
+    max_length = st.sidebar.slider("Maximum word length", min_value=4, max_value=12, value=8)
     starts_with = st.sidebar.text_input("Starts with (optional):", value="")
+    st.sidebar.caption("One or more starting letters")
 
     letters = st.text_input("Enter the 7 letters (no spaces):").lower()
     must_include = st.text_input("Enter the mandatory letter:").lower()
