@@ -23,7 +23,7 @@ def main():
     st.title(":bee: NYT Spelling Bee Solver :bee:")
 
     # Sidebar inputs
-    top_n = st.sidebar.number_input("Top N words", min_value=1, value=100000)
+    top_n = st.sidebar.number_input("Number of words to check", min_value=10000, value=100000, max_value=50000000)
     min_length = st.sidebar.number_input("Minimum word length", min_value=4, max_value=20, value=4)
     max_length = st.sidebar.number_input("Maximum word length", min_value=4, max_value=20, value=8)
     starts_with = st.sidebar.text_input("Starts with (optional):", value="")
