@@ -1,6 +1,7 @@
 import streamlit as st
 from wordfreq import top_n_list
 from itertools import product
+import time
 
 def generate_words(letters, must_include, top_n, min_length, max_length, starts_with):
     top_words = set(top_n_list('en', top_n))
@@ -20,7 +21,6 @@ def generate_words(letters, must_include, top_n, min_length, max_length, starts_
     return valid_words
 
 def main():
-    
     st.title("Spelling Bee Helper :bee:")
 
     # Sidebar inputs
@@ -35,12 +35,17 @@ def main():
 
     if st.button("Find Words"):
         if len(letters) == 7 and must_include in letters:
+            start_time = time.time()  # Start the timer
             words = generate_words(letters, must_include, top_n, min_length, max_length, starts_with)
+            end_time = time.time()  # End the timer
+
+            elapsed_time = end_time - start_time
 
             # Correct pangram check
             unique_letters = set(letters)
             pangrams = [word for word in words if unique_letters.issubset(set(word))]
 
+            st.caption(f"Execution time: {elapsed_time:.2f} seconds")  # Display execution time
             st.write("## Valid Words")
             st.write(sorted(list(words)))  # Display words as a list
                 
