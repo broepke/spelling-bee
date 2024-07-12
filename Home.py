@@ -1,6 +1,6 @@
 import streamlit as st
 from wordfreq import top_n_list
-from itertools import product
+import time
 
 class TrieNode:
     def __init__(self):
@@ -71,16 +71,23 @@ def main():
 
     if st.button("Find Words"):
         if len(letters) == 7 and must_include in letters:
+            start_time = time.time()  # Start the timer
             top_words = top_n_list('en', top_n)
             trie = Trie()
             for word in top_words:
                 trie.insert(word)
             words = generate_words(trie, letters, must_include, min_length, max_length, starts_with)
+            end_time = time.time()  # End the timer
+
+            elapsed_time = end_time - start_time
 
             # Correct pangram check
             unique_letters = set(letters)
             pangrams = [word for word in words if unique_letters.issubset(set(word))]
 
+            # Display execution time
+            st.caption(f"Execution time: {elapsed_time:.2f} seconds")
+            
             st.write("## Valid Words")
             st.write(sorted(list(words)))  # Display words as a list
                 
