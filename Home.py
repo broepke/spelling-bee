@@ -1,23 +1,59 @@
 import streamlit as st
 from wordfreq import top_n_list
 from itertools import product
-import time
 
-def generate_words(letters, must_include, top_n, min_length, max_length, starts_with):
-    top_words = set(top_n_list('en', top_n))
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.is_end_of_word = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word):
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                node.children[char] = TrieNode()
+            node = node.children[char]
+        node.is_end_of_word = True
+
+    def search(self, word):
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                return False
+            node = node.children[char]
+        return node.is_end_of_word
+
+    def starts_with(self, prefix):
+        node = self.root
+        for char in prefix:
+            if char not in node.children:
+                return False
+            node = node.children[char]
+        return True
+
+def generate_words(trie, letters, must_include, min_length, max_length, starts_with):
     valid_words = set()
     letters = letters.lower()
     must_include = must_include.lower()
     starts_with = starts_with.lower()
 
-    # Generate valid words using product to handle repeated letters
-    for i in range(min_length, max_length + 1):
-        for comb in product(letters, repeat=i):
-            if must_include in comb:
-                word = ''.join(comb)
-                if word in top_words and word.startswith(starts_with):
-                    valid_words.add(word)
-    
+    def backtrack(path):
+        if len(path) >= min_length and len(path) <= max_length and must_include in path:
+            word = ''.join(path)
+            if trie.search(word) and word.startswith(starts_with):
+                valid_words.add(word)
+        if len(path) < max_length:
+            for letter in letters:
+                path.append(letter)
+                if trie.starts_with(''.join(path)):
+                    backtrack(path)
+                path.pop()
+
+    backtrack([])
     return valid_words
 
 def main():
@@ -35,17 +71,16 @@ def main():
 
     if st.button("Find Words"):
         if len(letters) == 7 and must_include in letters:
-            start_time = time.time()  # Start the timer
-            words = generate_words(letters, must_include, top_n, min_length, max_length, starts_with)
-            end_time = time.time()  # End the timer
-
-            elapsed_time = end_time - start_time
+            top_words = top_n_list('en', top_n)
+            trie = Trie()
+            for word in top_words:
+                trie.insert(word)
+            words = generate_words(trie, letters, must_include, min_length, max_length, starts_with)
 
             # Correct pangram check
             unique_letters = set(letters)
             pangrams = [word for word in words if unique_letters.issubset(set(word))]
 
-            st.caption(f"Execution time: {elapsed_time:.2f} seconds")  # Display execution time
             st.write("## Valid Words")
             st.write(sorted(list(words)))  # Display words as a list
                 
