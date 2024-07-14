@@ -60,7 +60,7 @@ def main():
     st.title("Spelling Bee Helper :bee:")
 
     # Sidebar inputs
-    top_n = st.sidebar.number_input("Number of words to check", min_value=10000, value=100000, max_value=50000000)
+    top_n = st.sidebar.number_input("Number of words to check", min_value=10000, value=5000000, max_value=50000000)
     min_length = st.sidebar.slider("Minimum word length", min_value=4, max_value=12, value=4)
     max_length = st.sidebar.slider("Maximum word length", min_value=4, max_value=12, value=8)
     starts_with = st.sidebar.text_input("Starts with (optional):", value="")
