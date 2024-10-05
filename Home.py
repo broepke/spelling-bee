@@ -95,9 +95,9 @@ def main():
             if pangrams:
                 st.write(sorted(list(pangrams)))  # Display pangrams as a list
             else:
-                st.write("No pangrams found.")
+                st.warning("No pangrams found.")
         else:
-            st.write("Please enter exactly 7 letters, including the mandatory letter.")
+            st.error("Please enter exactly 7 letters, including the mandatory letter.")
 
 if __name__ == "__main__":
     main()
